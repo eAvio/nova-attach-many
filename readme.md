@@ -1,5 +1,8 @@
 # Nova Attach Many
 
+**This is a fork of [dillingham/nova-attach-many](https://github.com/dillingham/nova-attach-many) with additional features, including support for exclusive selection items.**
+
+
 [![Latest Version on Github](https://img.shields.io/github/release/dillingham/nova-attach-many.svg?style=flat-square)](https://packagist.org/packages/dillingham/nova-attach-many)
 [![Total Downloads](https://img.shields.io/packagist/dt/dillingham/nova-attach-many.svg?style=flat-square)](https://packagist.org/packages/dillingham/nova-attach-many) [![Twitter Follow](https://img.shields.io/twitter/follow/im_brian_d?color=%231da1f1&label=Twitter&logo=%231da1f1&logoColor=%231da1f1&style=flat-square)](https://twitter.com/im_brian_d)
 
@@ -59,6 +62,25 @@ You can set min, max, size or custom rule objects
 
 <img src="https://user-images.githubusercontent.com/29180903/52160802-9ee9ac80-2689-11e9-9657-80e3c0d83b27.png" width="75%" />
 
+---
+
+### Exclusive Items
+
+You can specify a list of IDs that, if selected, will make the selection exclusive—no other items can be selected at the same time. This is useful for options like "None" or "Unlimited" that should not be combined with other selections.
+
+**How to use:**
+
+```php
+AttachMany::make('Permissions')
+    ->exclusiveItems([1, 2, 3]);
+```
+
+- If an exclusive item is selected, all other selections are cleared and only the exclusive item remains selected.
+- If any exclusive item is selected, all other checkboxes are disabled.
+- If a non-exclusive item is selected, exclusive items become disabled.
+- The UI shows a small message next to disabled checkboxes to clarify why they are disabled.
+
+You can pass any array of IDs (integers or strings) to `exclusiveItems()`.
 
 ### Options
 
@@ -72,6 +94,7 @@ Here are a few customization options
 - `->showRefresh()` Request the resources again
 - `->showSubtitle()` Show the resource's subtitle
 - `->help('<b>Tip:</b> help text')` Set the help text
+- `->exclusiveItems([1,2,3])` Make listed IDs exclusive: if one is selected, no others can be selected at the same time
 
 ### All Options Demo
 <img src="https://user-images.githubusercontent.com/29180903/53781117-6978ee80-3ed5-11e9-8da4-d2f2408f1ffb.png" width="75%"/>
