@@ -2,6 +2,8 @@
 
 **This is a fork of [dillingham/nova-attach-many](https://github.com/dillingham/nova-attach-many) with additional features, including support for exclusive selection items.**
 
+**Compatible with Laravel Nova 4 and 5.**
+
 
 [![Latest Version on Github](https://img.shields.io/github/release/dillingham/nova-attach-many.svg?style=flat-square)](https://packagist.org/packages/dillingham/nova-attach-many)
 [![Total Downloads](https://img.shields.io/packagist/dt/dillingham/nova-attach-many.svg?style=flat-square)](https://packagist.org/packages/dillingham/nova-attach-many) [![Twitter Follow](https://img.shields.io/twitter/follow/im_brian_d?color=%231da1f1&label=Twitter&logo=%231da1f1&logoColor=%231da1f1&style=flat-square)](https://twitter.com/im_brian_d)
@@ -11,6 +13,8 @@ Belongs To Many create & edit form UI for Nova. Enables attaching relationships 
 ![attach-many](https://user-images.githubusercontent.com/29180903/52160651-be7fd580-2687-11e9-9ece-27332b3ce6bf.png)
 
 ### Installation
+
+Compatible with Laravel Nova 4 and 5.
 
 ```bash
 composer require dillingham/nova-attach-many
