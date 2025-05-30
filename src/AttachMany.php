@@ -17,6 +17,12 @@ use Laravel\Nova\Fields\FormatsRelatableDisplayValues;
 
 class AttachMany extends Field
 {
+    /**
+     * List of exclusive item IDs
+     *
+     * @var array
+     */
+    public $exclusiveItems = [];
     use Authorizable,
         FormatsRelatableDisplayValues,
         Searchable;
@@ -124,6 +130,18 @@ class AttachMany extends Field
                 );
             }
         });
+    }
+
+    /**
+     * Set exclusive items (only one can be selected at a time)
+     *
+     * @param array $items
+     * @return $this
+     */
+    public function exclusiveItems(array $items)
+    {
+        $this->exclusiveItems = $items;
+        return $this;
     }
 
     /**
@@ -248,6 +266,7 @@ class AttachMany extends Field
                 'showToolbar' => $this->showToolbar,
                 'showRefresh' => $this->showRefresh,
                 'withSubtitles' => $this->withSubtitles,
+                'exclusiveItems' => $this->exclusiveItems,
             ], parent::jsonSerialize());
         });
     }

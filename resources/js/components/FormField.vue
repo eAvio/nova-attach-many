@@ -27,8 +27,12 @@
                         v-for="resource in resources"
                         :key="resource.value"
                         :checked="selected.includes(resource.value)"
+                        :disabled="isCheckboxDisabled(resource.value)"
                         @input="toggle($event, resource.value)"
                     >
+                        <template v-if="isCheckboxDisabled(resource.value)">
+                            <span class="text-xs text-gray-400 ml-2">{{ exclusiveSelected ? __('Exclusive selection active') : __('Cannot combine with exclusive') }}</span>
+                        </template>
                         <div class="flex flex-col">
                             <div>{{ resource.display }}</div>
                             <div v-if="currentField.withSubtitles">
@@ -73,6 +77,16 @@ import {
 } from 'laravel-nova'
 
 export default {
+    props: ['resourceName', 'resourceId', 'field'],
+    computed: {
+        exclusiveItems() {
+            // Support both string and int IDs
+            return (this.field.exclusiveItems || []).map(id => id.toString());
+        },
+        exclusiveSelected() {
+            return this.selected.find(id => this.exclusiveItems.includes(id.toString()));
+        }
+    },
     mixins: [
         DependentFormField,
         HandlesValidationErrors,
@@ -92,6 +106,20 @@ export default {
     },
 
     methods: {
+        isCheckboxDisabled(id) {
+            const idStr = id.toString();
+            const anyExclusive = this.selected.some(sel => this.exclusiveItems.includes(sel.toString()));
+            const isExclusive = this.exclusiveItems.includes(idStr);
+            if (anyExclusive) {
+                // If an exclusive is selected, only allow it to be toggled
+                return !this.selected.includes(idStr);
+            } else if (this.selected.length > 0 && isExclusive) {
+                // If something else is selected, exclusive can't be toggled
+                return true;
+            }
+            return false;
+        },
+        
         setInitialValue() {
             this.retrieveData();
         },
@@ -125,11 +153,19 @@ export default {
         },
 
         toggle(event, id){
+            const idStr = id.toString();
+            const isExclusive = this.exclusiveItems.includes(idStr);
+            const anyExclusive = this.selected.some(sel => this.exclusiveItems.includes(sel.toString()));
             if(this.selected.includes(id)) {
                 this.selected = this.selected.filter(selectedId => selectedId != id);
-            }
-            else {
-                this.selected.push(id)
+            } else if (isExclusive) {
+                // If exclusive, deselect all and select only this
+                this.selected = [id];
+            } else if (anyExclusive) {
+                // Do nothing if an exclusive is already selected
+                return;
+            } else {
+                this.selected.push(id);
             }
         },
 
