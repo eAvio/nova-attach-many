@@ -26,7 +26,7 @@
                         class="p-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
                         v-for="resource in resources"
                         :key="resource.value"
-                        :checked="selected.includes(resource.value)"
+                        :checked="selected.map(id => id.toString()).includes(resource.value.toString())"
                         :disabled="isCheckboxDisabled(resource.value)"
                         @input="toggle($event, resource.value)"
                     >
@@ -156,16 +156,17 @@ export default {
             const idStr = id.toString();
             const isExclusive = this.exclusiveItems.includes(idStr);
             const anyExclusive = this.selected.some(sel => this.exclusiveItems.includes(sel.toString()));
-            if(this.selected.includes(id)) {
-                this.selected = this.selected.filter(selectedId => selectedId != id);
+            console.log('toggle', {id, idStr, selected: this.selected, exclusiveItems: this.exclusiveItems, isExclusive, anyExclusive});
+            if(this.selected.map(sel => sel.toString()).includes(idStr)) {
+                this.selected = this.selected.filter(selectedId => selectedId.toString() != idStr);
             } else if (isExclusive) {
                 // If exclusive, deselect all and select only this
-                this.selected = [id];
+                this.selected = [idStr];
             } else if (anyExclusive) {
                 // Do nothing if an exclusive is already selected
                 return;
             } else {
-                this.selected.push(id);
+                this.selected.push(idStr);
             }
         },
 
