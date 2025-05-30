@@ -54,9 +54,14 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     });
     var isExclusive = this.exclusiveItems.includes(idStr);
     if (anyExclusive) {
+      var disabled = !this.selected.includes(idStr);
+      if (disabled) {
+        console.log('[AttachMany] Checkbox for', idStr, 'disabled because an exclusive item is selected:', this.selected);
+      }
       // If an exclusive is selected, only allow it to be toggled
-      return !this.selected.includes(idStr);
+      return disabled;
     } else if (this.selected.length > 0 && isExclusive) {
+      console.log('[AttachMany] Checkbox for exclusive item', idStr, 'disabled because other items are selected:', this.selected);
       // If something else is selected, exclusive can't be toggled
       return true;
     }
@@ -96,18 +101,32 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     var anyExclusive = this.selected.some(function (sel) {
       return _this4.exclusiveItems.includes(sel.toString());
     });
-    if (this.selected.includes(id)) {
+    console.log('[AttachMany] toggle', {
+      id: id,
+      idStr: idStr,
+      selected: this.selected,
+      exclusiveItems: this.exclusiveItems,
+      isExclusive: isExclusive,
+      anyExclusive: anyExclusive
+    });
+    if (this.selected.map(function (sel) {
+      return sel.toString();
+    }).includes(idStr)) {
+      console.log('[AttachMany] Unselecting', idStr);
       this.selected = this.selected.filter(function (selectedId) {
-        return selectedId != id;
+        return selectedId.toString() != idStr;
       });
     } else if (isExclusive) {
+      console.log('[AttachMany] Selecting exclusive item', idStr, '- clearing all other selections');
       // If exclusive, deselect all and select only this
-      this.selected = [id];
+      this.selected = [idStr];
     } else if (anyExclusive) {
+      console.log('[AttachMany] Prevented selection of', idStr, 'because an exclusive item is already selected:', this.selected);
       // Do nothing if an exclusive is already selected
       return;
     } else {
-      this.selected.push(id);
+      console.log('[AttachMany] Selecting non-exclusive item', idStr);
+      this.selected.push(idStr);
     }
   },
   refresh: function refresh(event) {
@@ -319,7 +338,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_CheckboxWithLabel, {
           "class": "p-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700",
           key: resource.value,
-          checked: $data.selected.includes(resource.value),
+          checked: $data.selected.map(function (id) {
+            return id.toString();
+          }).includes(resource.value.toString()),
           disabled: $options.isCheckboxDisabled(resource.value),
           onInput: function onInput($event) {
             return $options.toggle($event, resource.value);
@@ -17622,13 +17643,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _FormField_vue_vue_type_template_id_c023248a__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./FormField.vue?vue&type=template&id=c023248a */ "./resources/js/components/FormField.vue?vue&type=template&id=c023248a");
 /* harmony import */ var _FormField_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./FormField.vue?vue&type=script&lang=js */ "./resources/js/components/FormField.vue?vue&type=script&lang=js");
-/* harmony import */ var _Users_gregorcepek_Projects_attach_many_eavio_nova_attach_many_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _Users_simondrevensek_Documents_sluz_ba_attach_many_nova_attach_many_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_Users_gregorcepek_Projects_attach_many_eavio_nova_attach_many_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_FormField_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_FormField_vue_vue_type_template_id_c023248a__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/components/FormField.vue"]])
+const __exports__ = /*#__PURE__*/(0,_Users_simondrevensek_Documents_sluz_ba_attach_many_nova_attach_many_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_FormField_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_FormField_vue_vue_type_template_id_c023248a__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/components/FormField.vue"]])
 /* hot reload */
 if (false) // removed by dead control flow
 {}
