@@ -58,9 +58,7 @@
             :disabled="isCheckboxDisabled(resource.value)"
             @input="toggle($event, resource.value)"
           >
-            <template v-if="isCheckboxDisabled(resource.value)">
-              <span class="text-xs text-gray-400 ml-2"></span>
-            </template>
+            
             <div class="flex flex-col">
               <div>{{ resource.display }}</div>
               <div v-if="currentField.withSubtitles">
